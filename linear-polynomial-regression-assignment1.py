@@ -8,7 +8,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 
 
-np.random.seed(54) #
+np.random.seed(54) #Every time you run the code, you get the same output.
 X = np.linspace(-3, 3, 100).reshape(-1, 1) # values of X 100 between -3, 3
 y = X**3 - 3*X + np.random.normal(0, 3, size=X.shape) #cubic curve and noice
 
@@ -77,9 +77,7 @@ for degree in degrees:
     # Plot model prediction curve
     plt.plot(X_plot, y_plot, label=f"Degree {degree}")
 
-# -------------------------------------------------
-# Display model prediction plot (FIXED POSITION)
-# -------------------------------------------------
+# Display model prediction 
 
 plt.title("Linear vs Polynomial Regression (Different Degrees)")
 plt.xlabel("X")
@@ -87,9 +85,7 @@ plt.ylabel("y")
 plt.legend()
 plt.show()
 
-# -------------------------------------------------
-# Training errors vs Testing errors plot (FIXED POSITION)
-# -------------------------------------------------
+# Training errors vs Testing errors plot
 
 plt.figure(figsize=(8, 5))
 
@@ -122,57 +118,42 @@ plt.show()
 # far from the real data and the loss will be high. When the parameters are
 # adjusted properly, the loss becomes smaller and the model fits the data better.
 
-# -------------------------------------------------
 # Analysis & Explanation
-# -------------------------------------------------
 
 # WHY DOES TRAINING ERROR ALWAYS DECREASE WITH HIGHER POLYNOMIAL DEGREE?
-# Answer: Higher degree polynomials have more flexibility to fit the training data.
-# As we increase the polynomial degree, the model gains more parameters and can create
-# more complex curves that fit closer to each training point. For example:
-# - Degree 1 (Linear): Simple straight line, cannot capture the cubic pattern
-# - Degree 3 (Cubic): Can capture the true cubic relationship
-# - Degree 8: Can fit not only the true pattern but also the random noise in data
-# This is why training error continuously decreases - the model becomes more "powerful"
-# and can memorize the training data, including its noise.
+# Training error decreases because higher-degree models are more flexible.
+# When the degree increases, the model can bend more and fit the training data better.
+# A simple model like degree 1 draws a straight line and misses the curve.
+# A higher-degree model can follow the curve more closely.
+# Because of this, the model makes fewer mistakes on training data as degree increases.
 
 # WHY DOES TEST ERROR BEHAVE DIFFERENTLY?
-# Answer: While training error keeps decreasing, test error first decreases then increases.
-# This is because:
-# - UNDERFITTING (Low degrees 1-2): Model is too simple to capture the true pattern
-#   Both training and test errors are high
-# - OPTIMAL (Degree 3): Model matches the true cubic function well
-#   Test error is at its minimum
-# - OVERFITTING (High degrees 4-8): Model fits the noise in training data instead of
-#   the true underlying pattern. Test error increases because the model doesn't generalize.
+# Test error does not always decrease.
+# At first, test error decreases because the model is learning the real pattern.
+# After a certain degree, test error increases because the model starts learning noise.
+# This means the model works well on training data but poorly on new data.
 
-# UNDERFITTING vs OVERFITTING:
-# UNDERFITTING (Degree 1-2):
-#   - Simple model cannot capture the true relationship
-#   - High BIAS (systematic error from not understanding the pattern)
-#   - Low VARIANCE (model is not sensitive to training data noise)
-#   - Both train and test errors are HIGH
+# UNDERFITTING:
+# Underfitting happens when the model is too simple.
+# Low-degree models cannot capture the real relationship in the data.
+# In underfitting, both training error and test error are high.
+# Example: Degree 1 or 2 models.
 
-# OVERFITTING (Degree 8):
-#   - Complex model fits the noise in training data
-#   - Low BIAS (fits the training data very closely)
-#   - High VARIANCE (model changes dramatically with different training sets)
-#   - Training error is VERY LOW but test error is HIGH
+# OVERFITTING:
+# Overfitting happens when the model is too complex.
+# High-degree models fit the noise in the training data.
+# In overfitting, training error is very low but test error is high.
+# Example: Degree 8 model.
 
-# THE BIAS-VARIANCE TRADEOFF:
-# This is the fundamental challenge in machine learning:
-# - Complex models have LOW BIAS but HIGH VARIANCE
-# - Simple models have HIGH BIAS but LOW VARIANCE
-# - The test error curve shows this tradeoff:
-#   - Left side (degree 1-2): High bias, low variance -> Underfitting
-#   - Middle (degree 3): Balanced bias and variance -> OPTIMAL
-#   - Right side (degree 8): Low bias, high variance -> Overfitting
-# The goal is to find the sweet spot where the model generalizes best to unseen data.
+# BIAS–VARIANCE TRADEOFF:
+# Simple models have high bias and low variance.
+# Complex models have low bias and high variance.
+# The best model is in the middle, where bias and variance are balanced.
+# This is seen where test error is minimum.
 
-# From this assignment, we observe:
-# Degree 1: Underfitting - model too simple
-# Degree 2: Still underfitting - quadratic cannot fully capture cubic pattern
-# Degree 3: OPTIMAL - cubic model matches the true data generating process
-# Degree 4: Slight overfitting - fitting extra patterns that don't generalize
-# Degree 8: Heavy overfitting - fitting noise in the training data
-
+# FINAL OBSERVATION FROM THIS ASSIGNMENT:
+# Degree 1: Underfitting – model is too simple.
+# Degree 2: Still underfitting – curve is not captured fully.
+# Degree 3: Best model – captures the real pattern well.
+# Degree 4: Slight overfitting – learning extra details.
+# Degree 8: Overfitting – learning noise instead of real pattern.
