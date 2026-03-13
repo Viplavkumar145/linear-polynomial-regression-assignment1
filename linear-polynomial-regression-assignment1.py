@@ -10,7 +10,7 @@ from sklearn.metrics import mean_squared_error
 
 np.random.seed(54) #Every time you run the code, you get the same output.
 X = np.linspace(-3, 3, 100).reshape(-1, 1) # values of X 100 between -3, 3
-y = X**3 - 3*X + np.random.normal(0, 3, size=X.shape) #cubic curve and noice
+y = X**3 - 3*X + np.random.normal(0, 3, size=X.shape) #cubic curve and noise
 
 # lets split the data into train (70%) and test (30%)
 
@@ -24,12 +24,12 @@ linear_model = LinearRegression()
 linear_model.fit(X_train, y_train)
 
 # Predict the model
-y_train_pred = linear_model.predict(X_train)
-y_test_pred = linear_model.predict(X_test)
+y_train_pred_linear = linear_model.predict(X_train)
+y_test_pred_linear = linear_model.predict(X_test)
 
 # calculate the errors
-mse_linear_train = mean_squared_error(y_train, y_train_pred)
-mse_linear_test = mean_squared_error(y_test, y_test_pred)
+mse_linear_train = mean_squared_error(y_train, y_train_pred_linear)
+mse_linear_test = mean_squared_error(y_test, y_test_pred_linear)
 
 print("Linear Regression Training MSE:", mse_linear_train)
 print("Linear Regression Testing MSE:", mse_linear_test)
@@ -39,10 +39,13 @@ print("Linear Regression Testing MSE:", mse_linear_test)
 
 degrees = [1, 2, 3, 4, 8]  # degrees
 
-train_erros = []  # Stores training error for each degree
-test_erros = []   # Stores testing error for each degree
+train_errors = []  # Stores training error for each degree
+test_errors = []   # Stores testing error for each degree
 
 plt.figure(figsize=(10, 8))
+
+# Plot training data once
+plt.scatter(X_train, y_train, color="blue", s=15, label="Training Data")
 
 for degree in degrees:
     # Create polynomial feature transformer
@@ -63,16 +66,13 @@ for degree in degrees:
     y_test_pred = model.predict(X_test_poly)
 
     # calculate Mean Squared Error
-    train_erros.append(mean_squared_error(y_train, y_train_pred))
-    test_erros.append(mean_squared_error(y_test, y_test_pred))
+    train_errors.append(mean_squared_error(y_train, y_train_pred))
+    test_errors.append(mean_squared_error(y_test, y_test_pred))
 
     # curve for plotting
     X_plot = np.linspace(-3, 3, 100).reshape(-1, 1)
     X_plot_poly = poly.transform(X_plot)
     y_plot = model.predict(X_plot_poly)
-
-    # Plot training data
-    plt.scatter(X_train, y_train, color="blue", s=15)
 
     # Plot model prediction curve
     plt.plot(X_plot, y_plot, label=f"Degree {degree}")
@@ -89,8 +89,8 @@ plt.show()
 
 plt.figure(figsize=(8, 5))
 
-plt.plot(degrees, train_erros, marker='o', label="Training Error")
-plt.plot(degrees, test_erros, marker='o', label="Testing Error")
+plt.plot(degrees, train_errors, marker='o', label="Training Error")
+plt.plot(degrees, test_errors, marker='o', label="Testing Error")
 
 plt.title("Training Error vs Testing Error")
 plt.xlabel("Polynomial Degree")
@@ -103,14 +103,14 @@ plt.show()
 # Loss Function: Mean Squared Error (MSE)
 
 # In linear regression, the loss function used is Mean Squared Error.
-# The loss function tells us how wrong the model’s predictions are
+# The loss function tells us how wrong the model's predictions are
 # when compared to the real values.
 
 # Squared error is used because it gives more importance to big mistakes.
 # When the error is squared, large errors become much bigger than small ones.
 # Squaring also removes negative values so that errors do not cancel each other.
 
-# Minimizing the loss means making the model’s predictions as close as possible
+# Minimizing the loss means making the model's predictions as close as possible
 # to the actual values. A smaller loss means the model is doing a better job.
 
 # The model parameters affect the loss because they decide where the line or
